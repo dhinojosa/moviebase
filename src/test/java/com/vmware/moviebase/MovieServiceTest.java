@@ -2,6 +2,7 @@ package com.vmware.moviebase;
 
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+
 import static org.testng.Assert.*;
 
 public class MovieServiceTest {
@@ -35,7 +36,7 @@ public class MovieServiceTest {
 	}
 	
 	@Test
-	public void removeAMovieAndGetTheTotal() {
+	public void removeAMovieAndGetTheTotal() throws MovieException {
 		movieService.addMovie(new Movie("E.T. - The Extra Terrestrial"));
 		movieService.addMovie(new Movie("Wall-E"));
 		movieService.removeByName("Wall-E");
@@ -43,8 +44,22 @@ public class MovieServiceTest {
 	}
 	
 	@Test
-	public void removeAMovieFromAnEmptyService() {}
+	public void removeAMovieFromAnEmptyService() {
+		try {
+		  movieService.removeByName("Wall-E");
+		  fail("Was exepecting an exception in removeAMovieFromAnEmptyService");
+		} catch (MovieException e) {
+		  assertEquals(e.getMessage(), "There are no movies in the service");
+		}
+	}
+
 	
 	@Test
 	public void removeAMovieThatDoesntExist() {}
 }
+
+
+
+
+
+
