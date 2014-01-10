@@ -8,12 +8,12 @@ import static org.testng.Assert.*;
 public class MovieServiceTest {
 
 	private MovieService movieService;
-	
+
 	@BeforeMethod
 	public void setUp() {
 		movieService = new MovieService("VMWare Movie Night");
 	}
-	
+
 	@Test
 	public void addTwoMovieAndGetTheTotal() {
 		// Subject Under Test
@@ -34,7 +34,7 @@ public class MovieServiceTest {
 		// Subject Under Test
 		assertEquals(movieService.getCount(), 0);
 	}
-	
+
 	@Test
 	public void removeAMovieAndGetTheTotal() throws MovieException {
 		movieService.addMovie(new Movie("E.T. - The Extra Terrestrial"));
@@ -42,24 +42,38 @@ public class MovieServiceTest {
 		movieService.removeByName("Wall-E");
 		assertEquals(movieService.getCount(), 1);
 	}
-	
+
 	@Test
 	public void removeAMovieFromAnEmptyService() {
 		try {
-		  movieService.removeByName("Wall-E");
-		  fail("Was exepecting an exception in removeAMovieFromAnEmptyService");
+			movieService.removeByName("Wall-E");
+			fail("Was exepecting an exception in removeAMovieFromAnEmptyService");
 		} catch (MovieException e) {
-		  assertEquals(e.getMessage(), "There are no movies in the service");
+			assertEquals(e.getMessage(), "There are no movies in the service");
 		}
 	}
 
+	@Test
+	public void removeAMovieThatDoesntExist() {
+		movieService.addMovie(new Movie("E.T. - The Extra Terrestrial"));
+		movieService.addMovie(new Movie("Wall-E"));
+		try {
+			movieService.removeByName("Titanic");
+			fail("Was expecting an exception in removeAMovieThatDoesntExist");
+		} catch (MovieException e) {
+			assertEquals(e.getMessage(), "That movie does not exist in the service");
+		}
+	}
 	
 	@Test
-	public void removeAMovieThatDoesntExist() {}
+	public void removeAMovieCalledStripesThatDoesntExist() {
+		movieService.addMovie(new Movie("E.T. - The Extra Terrestrial"));
+		movieService.addMovie(new Movie("Wall-E"));
+		try {
+			movieService.removeByName("Stripes");
+			fail("Was expecting an exception in removeAMovieThatDoesntExist");
+		} catch (MovieException e) {
+			assertEquals(e.getMessage(), "That movie does not exist in the service");
+		}
+	}
 }
-
-
-
-
-
-
